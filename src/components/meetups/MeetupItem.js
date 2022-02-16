@@ -2,18 +2,22 @@ import { MeetupItemStyled } from "./MeetupItemStyled"
 
 import { FavouritesContext } from "../store/favourites-context"
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 
 export default function MeetupItem(props) {
 
     const ctx = useContext(FavouritesContext);
 
-    const [isFavourite, setIsFavourite] = useState(ctx.itemIsFavourite(props.data.id))
+    const isFavourite = ctx.itemIsFavourite(props.data.id)
 
     function favouritesClickHandler() {
-        ctx.addFavourite(props.data)
-        setIsFavourite(ctx.itemIsFavourite(props.data.id))
+        if(isFavourite) {
+           ctx.removeFavourite(props.data.id)
+        } else {
+            ctx.addFavourite(props.data)
+        }
+
     }
 
 
@@ -23,7 +27,7 @@ export default function MeetupItem(props) {
             <h2>{props.data.title}</h2>
             <h4>{props.data.location}</h4>
             <p>{props.data.description}</p>
-            <a href="#" onClick={favouritesClickHandler}>{isFavourite ? <p>fav</p> : <p>not fav</p>}</a>
+            <a href="#" onClick={favouritesClickHandler}>{isFavourite ? <p>Remove Favourite</p> : <p>To Favourites</p>}</a>
         </MeetupItemStyled>
     )
 }
